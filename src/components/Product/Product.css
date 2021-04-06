@@ -9,3 +9,10 @@
   color: blue;
   font-weight: 400;
 }
+.shop-btn{
+  background-color: goldenrod;
+  width: 150px;
+  height: 30px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+}
