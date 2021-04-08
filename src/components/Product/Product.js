@@ -19,7 +19,9 @@ const Product = (props) => {
         <p><small>by: {seller}</small></p>
         <p>${price}</p>
         <p><small>Only {stock} left in stock - order soon</small></p>
-        <button onClick={() => handleAddToCart(props.product)} className='shop-btn'><FontAwesomeIcon icon={faShoppingCart} /> add to cart</button>
+        { 
+          props.showAddToCart && <button onClick={() => handleAddToCart(props.product)} className='shop-btn'><FontAwesomeIcon icon={faShoppingCart} /> add to cart</button>
+        }
       </div>
     </div>
   );
