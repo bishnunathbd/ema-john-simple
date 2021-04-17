@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
 import { UserContext } from "../../App";
 import { useHistory, useLocation } from "react-router";
-import { fbSignIn, googleSignIn, handleSignOut, initializeLoginFramework } from './loginManager';
+import { createUserWithEmailAndPassword, fbSignIn, googleSignIn, handleSignOut, initializeLoginFramework, signInWithEmailAndPassword } from './loginManager';
 
-function Login() {  
+function Login() {
   initializeLoginFramework();
 
   const [newUser, setNewUser] = useState(false);
@@ -21,31 +21,31 @@ function Login() {
   const history = useHistory();
   const location = useLocation();
   let { from } = location.state || { from: { pathname: "/" } };
-  
+
   const handleGoogleSignIn = () => {
     googleSignIn()
-    .then(res => {
-      setUser(res);
-      setLoggedInUser(res);
-      history.replace(from);
-    })
+      .then(res => {
+        setUser(res);
+        setLoggedInUser(res);
+        history.replace(from);
+      })
   }
 
   const handleFbSignIn = () => {
     fbSignIn()
-    .then(res => {
-      setUser(res);
-      setLoggedInUser(res);
-      history.replace(from);
-    })
+      .then(res => {
+        setUser(res);
+        setLoggedInUser(res);
+        history.replace(from);
+      })
   }
 
   const userSignOut = () => {
     handleSignOut()
-    .then(res => {
-      setUser(res);
-      setLoggedInUser(res);
-    })
+      .then(res => {
+        setUser(res);
+        setLoggedInUser(res);
+      })
   }
 
   // to valid input fields & update user state
@@ -68,26 +68,34 @@ function Login() {
 
   const handleSubmit = (e) => {
     if (newUser && user.email && user.password) {
-      
+      createUserWithEmailAndPassword(user.name, user.email, user.password)
+        .then(res => {
+          setUser(res);
+          setLoggedInUser(res);
+          history.replace(from);
+        })
     }
 
     if (!newUser && user.email && user.password) {
-      
+      signInWithEmailAndPassword(user.email, user.password)
+        .then(res => {
+          setUser(res);
+          setLoggedInUser(res);
+          history.replace(from);
+        })
     }
     e.preventDefault();
   }
 
-  
-
   return (
-    <div style={{textAlign: 'center'}}>
+    <div style={{ textAlign: 'center' }}>
       {
         user.isSignedIn ? <button onClick={userSignOut}>Sign out</button>
           : <button onClick={handleGoogleSignIn}>Google Sign In</button>
       }
-      <br/><br/>
+      <br /><br />
       <button onClick={handleFbSignIn}>Sign in using Facebook</button>
-      
+
       <div style={{ border: '2px solid purple', width: '50%', margin: '20px auto', padding: '20px' }}>
         <h2>Our own authentication</h2>
         <input type="checkbox" name="newUser" onChange={() => setNewUser(!newUser)} id="" />
