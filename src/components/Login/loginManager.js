@@ -22,7 +22,8 @@ export const googleSignIn = () => {
         name: displayName,
         email: email,
         photo: photoURL,
-        success: true
+        success: true,
+        error: ''
       };
       return signedInUser;
     })
@@ -43,7 +44,8 @@ export const fbSignIn = () => {
         name: displayName,
         email: email,
         photo: photoURL,
-        success: true
+        success: true,
+        error: ''
       };
       return signedInUser;
       // console.log('fb user after sign in', user);
@@ -83,10 +85,16 @@ export const handleSignOut = () => {
 export const createUserWithEmailAndPassword = (name, email, password) => {
   return firebase.auth().createUserWithEmailAndPassword(email, password)
     .then(res => {
-      const newUserInfo = res.user;
-      newUserInfo.success = true;
-      newUserInfo.error = '';
       updateUserName(name);
+      const {displayName, email, photoURL} = res.user;
+      const newUserInfo = {
+        isSignedIn: true,
+        name: displayName,
+        email: email,
+        photo: photoURL,
+        success: true,
+        error: ''
+      }
       return newUserInfo;
     })
     .catch((error) => {
@@ -102,9 +110,15 @@ export const createUserWithEmailAndPassword = (name, email, password) => {
 export const signInWithEmailAndPassword = (email, password) => {
   return firebase.auth().signInWithEmailAndPassword(email, password)
     .then(res => {
-      const newUserInfo = res.user;
-      newUserInfo.success = true;
-      newUserInfo.error = '';
+      const {displayName, email, photoURL} = res.user;
+      const newUserInfo = {
+        isSignedIn: true,
+        name: displayName,
+        email: email,
+        photo: photoURL,
+        success: true,
+        error: ''
+      }
       return newUserInfo;
     })
     .catch((error) => {
